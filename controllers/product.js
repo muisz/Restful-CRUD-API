@@ -1,10 +1,11 @@
-const helpers = require('../helpers/product');
 const responseCode = require('../constants/responseCode');
+const Product = require('../models/product');
 
 const createProductController = async (req, res) => {
     try {
         const { product_name, premium } = req.body;
-        const product = await helpers.saveProduct({ product_name, premium });
+        const model = new Product();
+        const product = await model.save({ product_name, premium });
         return res.status(201).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: {
@@ -25,7 +26,8 @@ const createProductController = async (req, res) => {
 
 const listProductController = async (req, res) => {
     try {
-        const products = await helpers.getProducts();
+        const model = new Product();
+        const products = await model.all();
         return res.status(201).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: {
@@ -43,7 +45,8 @@ const listProductController = async (req, res) => {
 const detailProductController = async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await helpers.getProductById(id);
+        const model = new Product();
+        const product = await model.getBy('product_id', id);
         if (!product) {
             return res.status(404).json({
                 ResponseCode: responseCode.GAGAL,
@@ -68,14 +71,15 @@ const updateProductController = async (req, res) => {
     try {
         const { id } = req.params;
         const { product_name, premium } = req.body;
-        const product = await helpers.getProductById(id);
+        const model = new Product();
+        const product = await model.getBy('product_id', id);
         if (!product) {
             return res.status(404).json({
                 ResponseCode: responseCode.GAGAL,
                 ResponseDesc: 'Gagal mendapatkan data produk',
             });
         }
-        await helpers.updateProductById(product.product_id, { product_name, premium });
+        await model.updateBy('product_id', product.product_id, { product_name, premium });
         return res.status(201).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: {
@@ -97,14 +101,15 @@ const updateProductController = async (req, res) => {
 const deleteProductController = async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await helpers.getProductById(id);
+        const model = new Product();
+        const product = await model.getBy('product_id', id);
         if (!product) {
             return res.status(404).json({
                 ResponseCode: responseCode.GAGAL,
                 ResponseDesc: 'Gagal mendapatkan data produk',
             });
         }
-        await helpers.deleteProductById(product.product_id);
+        await model.deleteBy('product_id', product.product_id);
         return res.status(201).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: 'Produk berhasil dihapus',
