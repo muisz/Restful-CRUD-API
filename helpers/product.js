@@ -18,6 +18,7 @@ const getProducts = () => new Promise((resolve, reject) => {
 const getProductById = (id) => new Promise((resolve, reject) => {
     knex(table)
         .where('product_id', id)
+        .first()
         .then((resp) => resolve(resp))
         .catch((err) => reject(err))
 });
