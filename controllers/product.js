@@ -28,7 +28,7 @@ const listProductController = async (req, res) => {
     try {
         const model = new Product();
         const products = await model.all();
-        return res.status(201).json({
+        return res.status(200).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: {
                 data: products,
@@ -53,7 +53,7 @@ const detailProductController = async (req, res) => {
                 ResponseDesc: 'Gagal mendapatkan data produk',
             });
         }
-        return res.status(201).json({
+        return res.status(200).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: {
                 data: product,
@@ -80,7 +80,7 @@ const updateProductController = async (req, res) => {
             });
         }
         await model.updateBy('product_id', product.product_id, { product_name, premium });
-        return res.status(201).json({
+        return res.status(200).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: {
                 data: {
@@ -110,7 +110,7 @@ const deleteProductController = async (req, res) => {
             });
         }
         await model.deleteBy('product_id', product.product_id);
-        return res.status(201).json({
+        return res.status(200).json({
             ResponseCode: responseCode.SUCCESS,
             ResponseDesc: 'Produk berhasil dihapus',
         });
